@@ -33,7 +33,11 @@ shortCode:{
         type:String,
         required:true
     },
-    tags:{
+    categoryTags:{
+        type:[String],
+        default:[]
+    },
+     keywords:{
         type:[String],
         default:[]
     },
