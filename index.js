@@ -27,6 +27,10 @@ server.use("/channels", channelRouter)
 
 
 
+server.get("/", (req,res)=>{
+    return res.status(200).send("okay")
+})
+
 //  handle errors
 server.use(handleErrors)
 const  startServer=async()=>{
