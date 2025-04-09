@@ -14,13 +14,15 @@ const  server= express()
 
 
 // cross platform origins
-server.use(cors({
+// server.use(cors({
 
-    origin: "http://localhost:5000",
-    methods: "GET,POST,PUT,DELETE",
-    credentials: true
-}
-))
+//     origin: "http://localhost:5000",
+//     methods: "GET,POST,PUT,DELETE",
+//     credentials: true
+// }
+// ))
+server.use(cors())
+
 server.use(express.json())
 
 server.get("/", async(req, res)=>{return res.status(200).send("hello")})
@@ -42,7 +44,7 @@ server.use(handleErrors)
 const  startServer=async()=>{
     const port= process.env.PORT||3500
     try{
-        await connect_db(process.env.mongo_uri)
+        await connect_db(process.env.external_mongo)
         server.listen(port,"0.0.0.0",()=>{
             console.log(` database connected, server is now listening on port: ${port} `)
         })

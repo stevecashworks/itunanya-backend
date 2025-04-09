@@ -1,13 +1,17 @@
 import createCustomError from "../../createCustomError.js"
 import  videoModel from "../../models/videos.js"
 import {nanoid} from "nanoid"
-
+import path from "path"
+import multer from "multer"
 export const  createVideo=async(req,res,next)=>{
    const videoId= nanoid(7)
    const shortCode=videoId
+   const  videoFile= req.files["video"][0]
+   const  thumbnailFile= req.files["thumbnail"][0]
+   
    try{
 
-            const newVideo= await videoModel.create({...req.body, creator:req.user.id, shortCode})
+            const newVideo= await videoModel.create({...req.body, url:videoFile, thumbnail:thumbnailFile, creator:req.user.id, shortCode})
 
             return res.status(200).json({success:true, result:"Video was uploaded successfully"})
         
@@ -74,3 +78,19 @@ export const searchVideos= async(req, res, next)=>{
    }
 }
 
+
+const storage= multer.diskStorage({
+   destination:(req,file,cb)=>{
+      if(file.fieldname==="video"){
+         cb(null, "v001/uploads/videos")
+      }
+      else if(file.fieldname==="thumbnail"){
+         cb(null, "v001/uploads/thumbnails")
+      }
+   },
+filename:(req,file,cb)=>{
+   cb(null,Date.now +"-"+file.originalname)
+}
+
+})
+export const upload= multer({storage})
